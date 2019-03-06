@@ -13,20 +13,21 @@ io.on('connection',function(socket){
     var player = {
         id:thisPlayerId,
         position:{
-            v:0,
-            
+            v:0,    
         }
     }
 
     players[thisPlayerId] = player;
     socket.emit('register', {id: thisPlayerId});
     socket.broadcast.emit('spawn', {id:thisPlayerId});
-    console.log('Sending spawn to new with ID', thisPlayerId);
+    socket.broadcast.emit('requestPosition');
+    
 
     for(var playerId in players){
         if(playerId == thisPlayerId)
         continue;
-        socket.emit('spawn', {id: thisPlayerId}); 
+        socket.emit('spawn', {id: thisPlayerId});
+        console.log('Sending spawn to new with ID', thisPlayerId); 
         
     }
 
@@ -39,13 +40,13 @@ io.on('connection',function(socket){
         console.log("Player Disconnected");
         delete players[thisPlayerId];
         socket.broadcast.emit('disconnected', {id: thisPlayerId});
-    } );
+    });
 
     socket.on('move', function(data){
         data.id = thisPlayerId;
         console.log("Player Moved", JSON.stringify(data));
         socket.broadcast.emit('move', data);
-    });jhg
+    });
 
     socket.on('updatePosition', function(data){
         data.id = thisPlayerId;
