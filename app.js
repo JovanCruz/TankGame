@@ -43,7 +43,7 @@ io.on('connection',function(socket){
     }
 
     players[thisPlayerId] = player;
-    socket.emit('register', {id: thisPlayerId});
+    socket.emit('register', {id:thisPlayerId});
     socket.broadcast.emit('spawn', {id:thisPlayerId});
     socket.broadcast.emit('requestPosition');
     
@@ -51,7 +51,7 @@ io.on('connection',function(socket){
     for(var playerId in players){
         if(playerId == thisPlayerId)
         continue;
-        socket.emit('spawn', {id: thisPlayerId});
+        socket.emit('spawn', players[playerId]);
         console.log('Sending spawn to new with ID', thisPlayerId); 
         
     }
